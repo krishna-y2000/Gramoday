@@ -10,7 +10,7 @@ router.get('/:id' ,async (req,res) =>{
         const cropRtr = await cropSchema.findById(req.params.id);
         if(cropRtr != null )
         {
-            return res.statusCode(200).send(cropRtr );
+            return res.send(cropRtr );
         }
     }
     catch(e)
@@ -35,12 +35,12 @@ router.post('/' ,async (req,res) => {
    }  );
     try
     {
-       const findData = await cropSchema.findOne({marketID:marketID});
+       const findData = await cropSchema.findOne({marketID:marketID  , cmdtyID : cmdtyID });
        if( findData == null)
        {
             await newCrop.save();
             console.log("Data Saved");
-            return res.send({
+            return res.status(200).send({
                 status : "success" , 
                 message : newCrop._id
             } )
@@ -52,7 +52,7 @@ router.post('/' ,async (req,res) => {
            await cropSchema.updateOne({_id : findData._id } , { $set : { price : updatedPrice  }  ,
              $push : { users : userID } } ) ;
 
-            return res.statusCode(200).send({
+            return res.status(200).send({
                 status : "success" , 
                 message : newCrop._id
             } )
